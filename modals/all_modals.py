@@ -1,7 +1,8 @@
 
 from sqlalchemy import Column,String,Integer,Date
 from utils.maindata import Base
-from sqlalchemy import LargeBinary
+from sqlalchemy import LargeBinary,TIMESTAMP
+
 
 
 
@@ -91,3 +92,34 @@ class ProfileManufacturer(Base):
     pin_code=Column(String(20),nullable=False)
     city=Column(String(200),nullable=False)
     address=Column(String(200),nullable=False)
+
+
+class Wishlist(Base):
+    __tablename__="wishlist"
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    product_id=Column(Integer,nullable=False)
+
+
+class AddToCart(Base):
+    __tablename__="addtocart"
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    product_id=Column(Integer,nullable=False)
+    product_quantity=Column(Integer,nullable=False)    
+
+
+
+class CreateOrder(Base):
+    __tablename__="order"
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    product_id=Column(Integer,nullable=True)
+    product_name=Column(String(200),nullable=True)
+    product_quantity=Column(Integer,nullable=True)
+    payment_mode=Column(String(200),nullable=False)
+    order_status=Column(String(20),nullable=True)
+    mrp=Column(Integer,nullable=True)
+    discount_on_product=Column(Integer,nullable=True)
+    total_price=Column(Integer,nullable=True)
+    ordered_at=Column(TIMESTAMP,nullable=True)

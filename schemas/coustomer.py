@@ -35,3 +35,21 @@ class ProfileSchemas(BaseModel):
     pin_code:int
     city:str
     address:str
+
+
+class WishlistSchemas(BaseModel):
+    coustomer_id:int
+    product_id:int  
+
+
+class AddtoCartSchemas(BaseModel):
+    coustomer_id:int
+    product_id:int
+    product_quantity:int
+
+
+class OderSchemas(BaseModel):
+    coustomer_id:int
+
+class OrderCencelSchemas(BaseModel):
+    coustomer_id:int    

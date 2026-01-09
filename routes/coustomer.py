@@ -1,8 +1,8 @@
 from fastapi import APIRouter,Depends,Query
-from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas
+from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas,WishlistSchemas,AddtoCartSchemas,OderSchemas,OrderCencelSchemas
 from sqlalchemy.orm import Session
 from utils.maindata import get_db
-from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile
+from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile,wishlist_product,add_to_cart,create_order,cancel_order,get_all_order,delete_coustomer
 
 
 router=APIRouter()
@@ -62,4 +62,42 @@ def profile_create(data:ProfileSchemas,db:Session=Depends(get_db)):
 @router.get("/getprofile/{id}")
 def profile_get_by_id(id:int,db:Session=Depends(get_db)):
     final=get_profile(id,db)
+    return final
+
+@router.post("/wishlist")
+def wishlist_create(data:WishlistSchemas,db:Session=Depends(get_db)):
+    final=wishlist_product(data,db)
+    return final
+
+
+@router.post("/addtocart")
+def add_cart(data:AddtoCartSchemas,db:Session=Depends(get_db)):
+    final=add_to_cart(data,db)
+    return final
+
+@router.post("/ordercreate")
+def order_create(data:OderSchemas,db:Session=Depends(get_db)):
+    final=create_order(data,db)
+    return final
+
+
+# @router.patch("/xyzxyz/{id}")
+# def xyz_xyz(id:int,db:Session=Depends(get_db)):
+#     final=xyz(id,db)
+#     return final
+
+
+@router.delete("/cencelorder")
+def oder_cencel(data:OrderCencelSchemas,db:Session=Depends(get_db)):
+    final=cancel_order(data,db)
+    return final
+
+@router.get("/getallorder/{id}")
+def all_order_get(id:int,db:Session=Depends(get_db)):
+    final=get_all_order(id,db)
+    return final
+
+@router.delete("/deletecoustomer/{id}")
+def coustomer_delete(id:int,db:Session=Depends(get_db)):
+    final=delete_coustomer(id,db)
     return final

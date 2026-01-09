@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,UploadFile,File,Form
 from schemas.manufacturer import ManufactureRegisterSchemas,MnaufacturerLoginSchemas,ChangePasswordManufacturer,ManufacturerOtpSchemas,ResetPasswordManufacturer,ProfileManufacturerSchemas
-from controller.manufacturer import manufacturer_register,manufacturer_login,product_create,change_password_manufacturer,sent_opt_manufacturer,reset_password_manufacturer,create_profile_manufacturer,get_profile_manufacturer
+from controller.manufacturer import manufacturer_register,manufacturer_login,product_create,change_password_manufacturer,sent_opt_manufacturer,reset_password_manufacturer,create_profile_manufacturer,get_profile_manufacturer,delete_manufacturer
 from sqlalchemy.orm  import Session
 from utils.maindata import get_db
 
@@ -61,3 +61,9 @@ def manufacturer_profile(data:ProfileManufacturerSchemas,db:Session=Depends(get_
 def get_manufacturer_profile(id:int,db:Session=Depends(get_db)):
      final=get_profile_manufacturer(id,db)
      return final
+
+@router.delete("/deletemanufacturer/{id}")
+def manufacturer_delete(id:int,db:Session=Depends(get_db)):
+    final=delete_manufacturer(id,db)
+    return final
+

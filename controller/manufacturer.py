@@ -171,3 +171,12 @@ def get_profile_manufacturer(id,db:Session):
     if not manufacturer:
         raise HTTPException(status_code=404,detail="not match your id ")
     return manufacturer
+
+
+def delete_manufacturer(id,db:Session):
+    manufacturer=db.query(Manufacturer).filter(Manufacturer.id==id).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not manufacturer")
+    db.delete(manufacturer)
+    db.commit()
+    return {"msg":"delete manufacturer"}
