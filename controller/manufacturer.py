@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
-from modals.all_modals import Manufacturer,Category,Brands
+from modals.all_modals import Manufacturer,Category,Brands,OtpManufacturer,ProfileManufacturer
 from fastapi import HTTPException
 from modals.all_modals import Product
 from fastapi import UploadFile,File,Form,Query
 from sqlalchemy.exc import SQLAlchemyError
-from utils.regular import password_hash,manufacturer_authentication
-
+from utils.regular import password_hash,manufacturer_authentication,varify_password
+import random
 
 
 s=["@","#","$","&"]
@@ -81,9 +81,93 @@ async def product_create(manufacturer_id,name,weight,category,brand,quantity,mrp
       raise HTTPException (status_code=404,detail="error")
 
     
+
+s=["@","#","$","&"]
+def change_password_manufacturer(data,db:Session):
+    manufacturer=db.query(Manufacturer).filter(Manufacturer.id==data.manufacturer_id).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not match your id ")
+    if varify_password(data.old_password,manufacturer.password):
+     for i in s:
+        if i in data.new_password:
+            if len(data.new_password)>=8:
+                new_hash=password_hash(data.new_password)
+                manufacturer.password=new_hash
+                db.commit()
+                db.refresh(manufacturer)
+                return{"msg":"change your password"}
+            raise HTTPException(status_code=404,detail="your length of passwod is less than 8")
+     raise HTTPException(status_code=404,detail="use special crackter in password")
+    raise HTTPException(status_code=404,detail="not match your old password")
+    
     
     
     
 
+def sent_opt_manufacturer(data,db:Session):
+    otp=db.query(OtpManufacturer).filter(OtpManufacturer.email==data.email).first()
+    if otp:
+        raise HTTPException(status_code=404,detail="already sent otp")
+    
+    manufacturer=db.query(Manufacturer).filter(Manufacturer.email==data.email).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not match your email")
+    new_otp=random.randint(1111,9999)
+    xyz=OtpManufacturer(email=data.email,otp=new_otp)
+    db.add(xyz)
+    db.commit()
+    return {"msg":f"sent otp this email {data.email},Otp {new_otp}"}
 
 
+
+
+s=["@","#","$","&"]
+def reset_password_manufacturer(data,db:Session):
+    manufacturer=db.query(Manufacturer).filter(Manufacturer.email==data.email).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not match your email")
+    manufacturerotp=db.query(OtpManufacturer).filter(OtpManufacturer.email==data.email).first()
+    if not manufacturerotp:
+        raise HTTPException(status_code=404,detail="not sent otp this email")
+    if manufacturerotp.otp==data.otp:
+        for i in s:
+            if i in data.new_password:
+                if len(data.new_password)>=8:
+                   new_hash=password_hash(data.new_password)
+                   manufacturer=db.query(Manufacturer).filter(Manufacturer.email==data.email).first()
+                   manufacturer.password=new_hash
+                   db.commit()
+                   db.refresh(manufacturer)
+                   db.delete(manufacturerotp)
+                   return {"msg":"reset your password"}
+                raise HTTPException(status_code=404,detail="length of password is less than 8")
+            raise HTTPException(status_code=404,detail="use special crackter in password")
+    raise HTTPException(status_code=404,detail="not match your otp")
+
+
+
+
+
+def create_profile_manufacturer(data,db:Session):
+    manufacturer=db.query(Manufacturer).filter(Manufacturer.id==data.manufacturer_id).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not match your id ")
+    xyz=ProfileManufacturer(manufacturer_id=data.manufacturer_id,
+                name=manufacturer.name,
+                email=manufacturer.email,
+                mob=data.mob,
+                state=data.state,
+                pin_code=data.pin_code,
+                city=data.city,
+                address=data.address)
+    db.add(xyz)
+    db.commit()
+    db.refresh(xyz)
+    return {"msg":"create your  manufacturer profile"}
+
+
+def get_profile_manufacturer(id,db:Session):
+    manufacturer=db.query(ProfileManufacturer).filter(ProfileManufacturer.manufacturer_id==id).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not match your id ")
+    return manufacturer

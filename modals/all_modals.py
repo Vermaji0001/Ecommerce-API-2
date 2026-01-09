@@ -57,3 +57,37 @@ class Otp(Base):
     id=Column(Integer,primary_key=True)
     email=Column(String(200),nullable=False)
     otp=Column(Integer,nullable=False)
+
+
+class OtpManufacturer(Base):
+    __tablename__="otpmanufacturer"
+    id=Column(Integer,primary_key=True)
+    email=Column(String(200),nullable=False)
+    otp=Column(Integer,nullable=False)
+
+
+
+class Profile(Base):
+    __tablename__="profile"
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    name=Column(String(200),nullable=False)
+    email=Column(String(200),nullable=False)
+    mob=Column(String(20),nullable=False)
+    state=Column(String(200),nullable=False)
+    pin_code=Column(String(20),nullable=False)
+    city=Column(String(200),nullable=False)
+    address=Column(String(200),nullable=False)
+
+
+class ProfileManufacturer(Base):
+    __tablename__="profilemanufacturer"
+    id=Column(Integer,primary_key=True)
+    manufacturer_id=Column(Integer,nullable=False)
+    name=Column(String(200),nullable=False)
+    email=Column(String(200),nullable=False)
+    mob=Column(String(20),nullable=False)
+    state=Column(String(200),nullable=False)
+    pin_code=Column(String(20),nullable=False)
+    city=Column(String(200),nullable=False)
+    address=Column(String(200),nullable=False)

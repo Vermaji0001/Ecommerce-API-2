@@ -27,3 +27,11 @@ class ResetPasswordSchemas(BaseModel):
     otp:int
     new_password:str    
 
+class ProfileSchemas(BaseModel):
+    coustomer_id:int
+    
+    mob:int
+    state:str
+    pin_code:int
+    city:str
+    address:str

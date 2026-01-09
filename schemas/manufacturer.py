@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from sqlalchemy import LargeBinary
+
 
 class ManufactureRegisterSchemas(BaseModel):
     store_name:str
@@ -21,3 +21,27 @@ class ProductCreateSchemas(BaseModel):
     quantity:int
     mrp:int
     discount_percentage:int
+
+
+class ChangePasswordManufacturer(BaseModel):
+    manufacturer_id:int
+    old_password:str
+    new_password:str
+
+
+class ManufacturerOtpSchemas(BaseModel):
+        email:str
+
+class ResetPasswordManufacturer(BaseModel):
+     email:str
+     otp:int
+     new_password:str        
+
+
+class ProfileManufacturerSchemas(BaseModel):
+    manufacturer_id:int
+    mob:int
+    state:str
+    pin_code:int
+    city:str
+    address:str     

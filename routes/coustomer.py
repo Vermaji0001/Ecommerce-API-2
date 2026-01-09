@@ -1,8 +1,8 @@
-from fastapi import APIRouter,Depends
-from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas
+from fastapi import APIRouter,Depends,Query
+from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas
 from sqlalchemy.orm import Session
 from utils.maindata import get_db
-from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password
+from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile
 
 
 router=APIRouter()
@@ -34,4 +34,32 @@ def otp_sent(data:OtpSentSchemas,db:Session=Depends(get_db)):
 @router.patch("/resetpassword")
 def password_reset(data:ResetPasswordSchemas,db:Session=Depends(get_db)):
     final=reset_password(data,db)
+    return final
+
+@router.get("/getproduct/{id}")
+def product_searching(id:int,db:Session=Depends(get_db)):
+    final=get_product(id,db)
+    return final
+
+@router.get("/getcategory")
+def get_category(db:Session=Depends(get_db)):
+    final=category_get(db)
+    return final
+
+
+
+@router.get("/getbrand")
+def get_brand(db:Session=Depends(get_db)):
+    final=brand_get(db)
+    return final
+
+
+@router.post("/profile")
+def profile_create(data:ProfileSchemas,db:Session=Depends(get_db)):
+    final=create_profile(data,db)
+    return final
+
+@router.get("/getprofile/{id}")
+def profile_get_by_id(id:int,db:Session=Depends(get_db)):
+    final=get_profile(id,db)
     return final
