@@ -1,7 +1,8 @@
 
 from sqlalchemy import Column,String,Integer,Date
 from utils.maindata import Base
-from sqlalchemy import LargeBinary,TIMESTAMP
+from sqlalchemy import LargeBinary,TIMESTAMP,ForeignKey
+from sqlalchemy.orm import relationship
 
 
 
@@ -16,6 +17,8 @@ class Coustomer(Base):
     dob=Column(String(20),nullable=False)
     referal_code=Column(String(10),nullable=True)
     created_at=Column(TIMESTAMP,nullable=False)
+    order=relationship("CreateOrder",back_populates="coustomer",uselist=False,cascade="all, delete-orphan")
+    profile=relationship("Profile",back_populates="coustomer",cascade="all, delete-orphan",uselist=False)
 
 
 
@@ -27,12 +30,15 @@ class Manufacturer(Base):
     email=Column(String(200),nullable=False)
     password=Column(String(200),nullable=False)
     created_at=Column(TIMESTAMP,nullable=False)
+    profiles=relationship("ProfileManufacturer",back_populates="manufacturers",cascade="all, delete-orphan")
+    product=relationship("Product",back_populates="manufacturer",cascade="all,delete-orphan")
+
 
 
 class Product(Base):
     __tablename__="product"
     id=Column(Integer,primary_key=True)
-    manufacturer_id=Column(Integer,nullable=False)
+    manufacturer_id=Column(Integer,ForeignKey("registercoustomer.id",ondelete="CASCADE"),nullable=False)
     image=Column(LargeBinary,nullable=False)
     name=Column(String(200),nullable=False)
     weight=Column(String(200),nullable=False)
@@ -42,6 +48,9 @@ class Product(Base):
     mrp=Column(Integer,nullable=False)
     discount_percentage=Column(Integer,nullable=False)
     sale_price=Column(Integer,nullable=True)
+    manufacturer=relationship("Manufacturer",back_populates="product")
+
+
 
 class Category(Base):
     __tablename__="category"
@@ -73,7 +82,7 @@ class OtpManufacturer(Base):
 class Profile(Base):
     __tablename__="profile"
     id=Column(Integer,primary_key=True)
-    coustomer_id=Column(Integer,nullable=False)
+    coustomer_id=Column(Integer,ForeignKey("registercoustomer.id",ondelete="CASCADE"),nullable=False)
     name=Column(String(200),nullable=False)
     email=Column(String(200),nullable=False)
     mob=Column(String(20),nullable=False)
@@ -81,12 +90,13 @@ class Profile(Base):
     pin_code=Column(String(20),nullable=False)
     city=Column(String(200),nullable=False)
     address=Column(String(200),nullable=False)
+    coustomer=relationship("Coustomer",back_populates="profile")
 
 
 class ProfileManufacturer(Base):
     __tablename__="profilemanufacturer"
     id=Column(Integer,primary_key=True)
-    manufacturer_id=Column(Integer,nullable=False)
+    manufacturer_id=Column(Integer,ForeignKey("manufacturerregister.id",ondelete="CASCADE"),nullable=False)
     name=Column(String(200),nullable=False)
     email=Column(String(200),nullable=False)
     mob=Column(String(20),nullable=False)
@@ -94,6 +104,7 @@ class ProfileManufacturer(Base):
     pin_code=Column(String(20),nullable=False)
     city=Column(String(200),nullable=False)
     address=Column(String(200),nullable=False)
+    manufacturers=relationship("Manufacturer",back_populates="profiles")
 
 
 class Wishlist(Base):
@@ -115,7 +126,7 @@ class AddToCart(Base):
 class CreateOrder(Base):
     __tablename__="order"
     id=Column(Integer,primary_key=True)
-    coustomer_id=Column(Integer,nullable=False)
+    coustomer_id=Column(Integer,ForeignKey("registercoustomer.id",ondelete="CASCADE"),nullable=False)
     product_id=Column(Integer,nullable=True)
     product_name=Column(String(200),nullable=True)
     product_quantity=Column(Integer,nullable=True)
@@ -125,6 +136,7 @@ class CreateOrder(Base):
     discount_on_product=Column(Integer,nullable=True)
     total_price=Column(Integer,nullable=True)
     ordered_at=Column(TIMESTAMP,nullable=True)
+    coustomer=relationship("Coustomer",back_populates="order",uselist=True)
 
 
 
@@ -142,11 +154,13 @@ class KYCdetails(Base):
     ifsc_code=Column(String(200),nullable=False)
 
 
+
 class Notification(Base):
     __tablename__='notification'
     id=Column(Integer,primary_key=True)
     coustomer_id=Column(Integer,nullable=False)
     notification=Column(String(200),nullable=False)
+
 
 
 

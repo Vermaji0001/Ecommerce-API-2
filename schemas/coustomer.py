@@ -49,11 +49,28 @@ class AddtoCartSchemas(BaseModel):
     product_quantity:int
 
 
+
+
+
+
+
 class OderSchemas(BaseModel):
     coustomer_id:int
 
+
+
+
+
+
+
+
+
 class OrderCencelSchemas(BaseModel):
     coustomer_id:int    
+
+
+
+
 
 
 class KYCschemas(BaseModel):

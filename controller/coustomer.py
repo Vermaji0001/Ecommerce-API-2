@@ -36,7 +36,7 @@ def coustomer_register(data,db:Session):
                 db.add(xyz)
                 db.commit()
                 db.refresh(xyz)
-                return {"coustomer is register"}
+                return {"msg","coustomer is register"}
               raise HTTPException (status_code=404,detail="entre your dob")
            raise HTTPException(status_code=404,detail="your password length is lessthan 8 ")
     raise HTTPException (status_code=404,detail="use speacial crackter")
@@ -229,6 +229,7 @@ def create_order(data,db:Session):
       time=datetime.now()
       discount_on_products=(product.mrp*product.discount_percentage/100)*addtocarts.product_quantity
       total_prices=(product.mrp-discount_on_products)*addtocarts.product_quantity
+      
       xyz=CreateOrder(coustomer_id=data.coustomer_id,
                       product_id=addtocarts.product_id,
                       product_name=product.name,
@@ -258,6 +259,7 @@ def create_order(data,db:Session):
     except SQLAlchemyError:
         db.rollback()
         raise HTTPException(status_code=404,detail="something went wrong")
+        
 
 # s=100    
 # def xyz(id,db:Session):

@@ -216,7 +216,7 @@ def profile_update_manufacturer(id,data,db:Session):
     db.commit()
     return {"msg":"change manufacturer data"} 
 
-
+###################################################################################################################################
 
 
    
