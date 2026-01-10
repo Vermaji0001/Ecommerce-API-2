@@ -38,7 +38,7 @@ class Manufacturer(Base):
 class Product(Base):
     __tablename__="product"
     id=Column(Integer,primary_key=True)
-    manufacturer_id=Column(Integer,ForeignKey("registercoustomer.id",ondelete="CASCADE"),nullable=False)
+    manufacturer_id=Column(Integer,ForeignKey("manufacturerregister.id",ondelete="CASCADE"),nullable=False)
     image=Column(LargeBinary,nullable=False)
     name=Column(String(200),nullable=False)
     weight=Column(String(200),nullable=False)

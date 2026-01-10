@@ -43,7 +43,7 @@ def manufacturer_authentication(email,password,db:Session):
     return manufacturer
 
 
-def craete_token(data:dict,expire:Optional[timedelta]=None):
+def create_token(data:dict,expire:Optional[timedelta]=None):
     new_data=data.copy()
     if expire:
         expire=datetime.now()+expire
