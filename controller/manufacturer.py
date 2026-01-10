@@ -6,6 +6,8 @@ from fastapi import UploadFile,File,Form,Query
 from sqlalchemy.exc import SQLAlchemyError
 from utils.regular import password_hash,manufacturer_authentication,varify_password
 import random
+from schemas.coustomer import UpdateProfleSchemas
+from datetime import datetime
 
 
 s=["@","#","$","&"]
@@ -20,7 +22,8 @@ def manufacturer_register(data,db:Session):
         if i in data.password:
             if len(data.password)>=8:
                 hash_pass=password_hash(data.password)
-                xyz=Manufacturer(store_name=data.store_name,name=data.name,email=data.email,password=hash_pass)
+                time=datetime.now()
+                xyz=Manufacturer(store_name=data.store_name,name=data.name,email=data.email,password=hash_pass,created_at=time)
                 db.add(xyz)
                 db.commit()
                 db.refresh(xyz)
@@ -180,3 +183,40 @@ def delete_manufacturer(id,db:Session):
     db.delete(manufacturer)
     db.commit()
     return {"msg":"delete manufacturer"}
+
+
+
+def delete_product(id,db:Session):
+    product=db.query(Product).filter(Product.id==id).first()
+    if not product:
+        raise HTTPException(status_code=404,detail="not match your product id ")
+    db.delete(product)
+    db.commit()
+    return {"msg":"delete your product"}
+
+
+
+def profile_update_manufacturer(id,data,db:Session):
+    profile=db.query(ProfileManufacturer).filter(ProfileManufacturer.manufacturer_id==id).first()
+    if not profile:
+        raise HTTPException(status_code=404,detail="please create profile")
+    profile.name=data.name
+    profile.email=data.email
+    profile.mob=data.mob
+    profile.state=data.state
+    profile.pin_code=data.pin_code
+    profile.city=data.city
+    profile.address=data.address
+    db.commit()
+    manufacturer=db.query(Manufacturer).filter(Manufacturer.id==id).first()
+    if not manufacturer:
+        raise HTTPException(status_code=404,detail="not match your coustomer")
+    manufacturer.name=data.name
+    manufacturer.email=data.email
+    db.commit()
+    return {"msg":"change manufacturer data"} 
+
+
+
+
+   

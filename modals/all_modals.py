@@ -15,6 +15,7 @@ class Coustomer(Base):
     password=Column(String(200),nullable=False)
     dob=Column(String(20),nullable=False)
     referal_code=Column(String(10),nullable=True)
+    created_at=Column(TIMESTAMP,nullable=False)
 
 
 
@@ -25,6 +26,7 @@ class Manufacturer(Base):
     name=Column(String(200),nullable=False)
     email=Column(String(200),nullable=False)
     password=Column(String(200),nullable=False)
+    created_at=Column(TIMESTAMP,nullable=False)
 
 
 class Product(Base):
@@ -123,3 +125,34 @@ class CreateOrder(Base):
     discount_on_product=Column(Integer,nullable=True)
     total_price=Column(Integer,nullable=True)
     ordered_at=Column(TIMESTAMP,nullable=True)
+
+
+
+class KYCdetails(Base):
+    __tablename__="kycdetail"
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    name=Column(String(200),nullable=False)
+    mob=Column(String(20),nullable=False)
+    email=Column(String(200),nullable=False)
+    pin_code=Column(String(200),nullable=False)
+    document_image=Column(LargeBinary,nullable=False)
+    account_holder_name=Column(String(200),nullable=False)
+    account_number=Column(Integer,nullable=False)
+    ifsc_code=Column(String(200),nullable=False)
+
+
+class Notification(Base):
+    __tablename__='notification'
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    notification=Column(String(200),nullable=False)
+
+
+
+class RateUs(Base):
+    __tablename__="rateus"
+    id=Column(Integer,primary_key=True)
+    coustomer_id=Column(Integer,nullable=False)
+    product_id=Column(Integer,nullable=False)
+    rate_us=Column(String(5),nullable=False)    

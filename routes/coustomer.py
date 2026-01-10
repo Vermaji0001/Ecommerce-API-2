@@ -1,8 +1,8 @@
-from fastapi import APIRouter,Depends,Query
-from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas,WishlistSchemas,AddtoCartSchemas,OderSchemas,OrderCencelSchemas
+from fastapi import APIRouter,Depends,Query,UploadFile,Form,File
+from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas,WishlistSchemas,AddtoCartSchemas,OderSchemas,OrderCencelSchemas,RateUsSchemas,UpdateProfleSchemas
 from sqlalchemy.orm import Session
 from utils.maindata import get_db
-from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile,wishlist_product,add_to_cart,create_order,cancel_order,get_all_order,delete_coustomer
+from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile,wishlist_product,add_to_cart,create_order,cancel_order,get_all_order,delete_coustomer,kyc_detail,review_on_product,cencel_add_to_cart,profile_update
 
 
 router=APIRouter()
@@ -100,4 +100,32 @@ def all_order_get(id:int,db:Session=Depends(get_db)):
 @router.delete("/deletecoustomer/{id}")
 def coustomer_delete(id:int,db:Session=Depends(get_db)):
     final=delete_coustomer(id,db)
+    return final
+
+@router.post("/kyc")
+async def details_kyc(coustomer_id:int=Form(...),
+                document_image:UploadFile=File(...),
+                account_holder_name:str=Form(...),
+                account_number:int=Form(...),
+                confirm_acc_number:int=Form(...),
+                ifsc_code:str=Form(...),db:Session=Depends(get_db)):
+    final= await kyc_detail(coustomer_id,document_image,account_holder_name,account_number,confirm_acc_number,ifsc_code,db)
+    return final
+             
+@router.post("/rateus")
+def reviews_submit(data:RateUsSchemas,db:Session=Depends(get_db)):
+    final=review_on_product(data,db)
+    return final
+
+
+
+@router.delete("/deleteaddtocart/{id}")
+def addtocart_delete(id:int,db:Session=Depends(get_db)):
+    final=cencel_add_to_cart(id,db)
+    return final
+
+
+@router.patch("/updateprofile/{id}")
+def update_profile(id,data:UpdateProfleSchemas,db:Session=Depends(get_db)):
+    final=profile_update(id,data,db)
     return final

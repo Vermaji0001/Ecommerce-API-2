@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class ManufactureRegisterSchemas(BaseModel):
@@ -44,4 +45,18 @@ class ProfileManufacturerSchemas(BaseModel):
     state:str
     pin_code:int
     city:str
-    address:str     
+    address:str  
+
+
+class UpdateManufacturerProfleSchemas(BaseModel):
+        name:Optional[str]=None
+        email:Optional[str]=None
+        mob:Optional[str]=None
+        state:Optional[str]=None
+        pin_code:Optional[str]=None
+        city:Optional[str]=None
+        address:Optional[str]=None 
+
+
+        
+             
