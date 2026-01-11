@@ -285,14 +285,8 @@ def create_order(data,db:Session):
         raise HTTPException(status_code=404,detail="Something went wrong")
         
 
-# s=100    
-# def xyz(id,db:Session):
-#     product=db.query(Product).filter(Product.id==id).first()
-#     if product:
-#         product.quantity=s
-#         db.commit()
-#         return {"xyz"}
-#     raise HTTPException(status_code=404,detail="xyzzzzzzzzzzz")
+
+
 
 
 

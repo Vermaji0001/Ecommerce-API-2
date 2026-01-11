@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 
 
-
+#Coustomer Register
 
 class Coustomer(Base):
     __tablename__="registercoustomer"
@@ -21,6 +21,7 @@ class Coustomer(Base):
     profile=relationship("Profile",back_populates="coustomer",cascade="all, delete-orphan",uselist=False)
 
 
+# Manufacturer Register
 
 class Manufacturer(Base):
     __tablename__="manufacturerregister"
@@ -34,6 +35,7 @@ class Manufacturer(Base):
     product=relationship("Product",back_populates="manufacturer",cascade="all,delete-orphan")
 
 
+#product create
 
 class Product(Base):
     __tablename__="product"
@@ -52,17 +54,23 @@ class Product(Base):
 
 
 
+#create category
+
 class Category(Base):
     __tablename__="category"
     id=Column(Integer,primary_key=True)
     name=Column(String(200),nullable=False)
 
 
+# Brands Create
+
 class Brands(Base):
     __tablename__="brands"
     id=Column(Integer,primary_key=True)
     name=Column(String(200),nullable=False)
 
+
+# OTP
 
 class Otp(Base):
     __tablename__="otp"
@@ -71,6 +79,8 @@ class Otp(Base):
     otp=Column(Integer,nullable=False)
 
 
+# Otp manufacturer
+
 class OtpManufacturer(Base):
     __tablename__="otpmanufacturer"
     id=Column(Integer,primary_key=True)
@@ -78,6 +88,7 @@ class OtpManufacturer(Base):
     otp=Column(Integer,nullable=False)
 
 
+# Cousotmer Profile
 
 class Profile(Base):
     __tablename__="profile"
@@ -93,6 +104,8 @@ class Profile(Base):
     coustomer=relationship("Coustomer",back_populates="profile")
 
 
+#Manufacturer Profile
+
 class ProfileManufacturer(Base):
     __tablename__="profilemanufacturer"
     id=Column(Integer,primary_key=True)
@@ -107,12 +120,16 @@ class ProfileManufacturer(Base):
     manufacturers=relationship("Manufacturer",back_populates="profiles")
 
 
+# Create wishlist
+
 class Wishlist(Base):
     __tablename__="wishlist"
     id=Column(Integer,primary_key=True)
     coustomer_id=Column(Integer,nullable=False)
     product_id=Column(Integer,nullable=False)
 
+
+# Addtocart
 
 class AddToCart(Base):
     __tablename__="addtocart"
@@ -122,6 +139,7 @@ class AddToCart(Base):
     product_quantity=Column(Integer,nullable=False)    
 
 
+#Create Order
 
 class CreateOrder(Base):
     __tablename__="order"
@@ -139,6 +157,7 @@ class CreateOrder(Base):
     coustomer=relationship("Coustomer",back_populates="order",uselist=True)
 
 
+# KYC Details
 
 class KYCdetails(Base):
     __tablename__="kycdetail"
@@ -154,6 +173,7 @@ class KYCdetails(Base):
     ifsc_code=Column(String(200),nullable=False)
 
 
+#Notification
 
 class Notification(Base):
     __tablename__='notification'
@@ -163,6 +183,8 @@ class Notification(Base):
 
 
 
+
+# Rate Us 
 
 class RateUs(Base):
     __tablename__="rateus"

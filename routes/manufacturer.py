@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,UploadFile,File,Form
-from schemas.manufacturer import ManufactureRegisterSchemas,MnaufacturerLoginSchemas,ChangePasswordManufacturer,ManufacturerOtpSchemas,ResetPasswordManufacturer,ProfileManufacturerSchemas,UpdateManufacturerProfleSchemas
-from controller.manufacturer import manufacturer_register,manufacturer_login,product_create,change_password_manufacturer,sent_opt_manufacturer,reset_password_manufacturer,create_profile_manufacturer,get_profile_manufacturer,delete_manufacturer,delete_product,profile_update_manufacturer
+from schemas.manufacturer import ManufactureRegisterSchemas,MnaufacturerLoginSchemas,ChangePasswordManufacturer,ManufacturerOtpSchemas,ResetPasswordManufacturer,ProfileManufacturerSchemas,UpdateManufacturerProfleSchemas,IncreaseQuantity
+from controller.manufacturer import manufacturer_register,manufacturer_login,product_create,change_password_manufacturer,sent_opt_manufacturer,reset_password_manufacturer,create_profile_manufacturer,get_profile_manufacturer,delete_manufacturer,delete_product,profile_update_manufacturer,increase_quantity
 from sqlalchemy.orm  import Session
 from utils.maindata import get_db
 
@@ -77,4 +77,11 @@ def product_delete(id:int,db:Session=Depends(get_db)):
 @router.patch("/updatemanufacturerprofile/{id}")
 def update_profile_manufacturer(id,data:UpdateManufacturerProfleSchemas,db:Session=Depends(get_db)):
     final=profile_update_manufacturer(id,data,db)
+    return final
+
+
+
+@router.patch("/xyzxyz/{id}")
+def product_quantity_increase(id:int,data:IncreaseQuantity,db:Session=Depends(get_db)):
+    final=increase_quantity(id,data,db)
     return final

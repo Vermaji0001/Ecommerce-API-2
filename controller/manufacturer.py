@@ -243,3 +243,14 @@ def profile_update_manufacturer(id,data,db:Session):
     manufacturer.email=data.email
     db.commit()
     return {"msg":"Update Manufacturer Profile"} 
+
+
+
+
+def increase_quantity(id,data,db:Session):
+    product=db.query(Product).filter(Product.id==id).first()
+    if product:
+        product.quantity=data.increase_quantity
+        db.commit()
+        return {"Msg":"update Product Quantity"}
+    raise HTTPException(status_code=404,detail="NOt found Data")

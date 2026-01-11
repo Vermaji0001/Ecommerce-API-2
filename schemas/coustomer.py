@@ -2,6 +2,7 @@ from pydantic import BaseModel ,EmailStr
 from typing import Optional
 
 
+#Coustomer Register
 
 class CoustomerRegisterSchemas(BaseModel):
     name:str
@@ -10,27 +11,41 @@ class CoustomerRegisterSchemas(BaseModel):
     dob:str
     referal_code:str
 
+#Coustomer Login
+
 class CoustomerLogin(BaseModel):
     email:str
     password:str
+
+
+# Change Password    
 
 class ChangePasswordSchemas(BaseModel):
     coustomer_id:int
     old_password:str
     new_password:str  
 
+
+
+# Sent Opt on Email    
+
 class OtpSentSchemas(BaseModel):
     email:str
 
 
+# Reset Password
+
 class ResetPasswordSchemas(BaseModel):
     email:str
     otp:int
-    new_password:str    
+    new_password:str   
+
+
+
+# Craete Profile
 
 class ProfileSchemas(BaseModel):
     coustomer_id:int
-    
     mob:int
     state:str
     pin_code:int
@@ -38,10 +53,15 @@ class ProfileSchemas(BaseModel):
     address:str
 
 
+# Add product in wishlist
+
 class WishlistSchemas(BaseModel):
     coustomer_id:int
     product_id:int  
 
+
+
+# Product add to cart
 
 class AddtoCartSchemas(BaseModel):
     coustomer_id:int
@@ -52,7 +72,7 @@ class AddtoCartSchemas(BaseModel):
 
 
 
-
+# Create order
 
 class OderSchemas(BaseModel):
     coustomer_id:int
@@ -63,7 +83,7 @@ class OderSchemas(BaseModel):
 
 
 
-
+# Cancel order
 
 class OrderCencelSchemas(BaseModel):
     coustomer_id:int    
@@ -72,6 +92,7 @@ class OrderCencelSchemas(BaseModel):
 
 
 
+# KYC details
 
 class KYCschemas(BaseModel):
     coustomer_id:int
@@ -81,10 +102,16 @@ class KYCschemas(BaseModel):
     ifsce_code:str  
 
 
+
+#Rate Us
+
 class RateUsSchemas(BaseModel):
     coustomer_id:int
     rate_us:str      
 
+
+
+# Update Profile
 
 class UpdateProfleSchemas(BaseModel):
         name:Optional[str]=None
