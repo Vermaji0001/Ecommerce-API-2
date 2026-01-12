@@ -9,7 +9,7 @@ import random
 from datetime import timedelta
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
-from fastapi.responses import StreamingResponse
+
 import io
 
 
@@ -119,16 +119,16 @@ def reset_password(data,db:Session):
     raise HTTPException(status_code=404,detail="InCorrect otp")
     
     
-# def searching_product(page,limit,name,db:Session):
-#     product=db.query(Product)
-#     if product:
-#         product=product.filter(Product.name.ilike(f"%{name}%"))
-#     skip=int(page-1)*limit
-#     data=product.offset(skip).limit(limit).all()
+
+# searching   product
+def searching_product(page,limit,name,db:Session):
+    product=db.query(Product)
+    if product:
+        product=product.filter(Product.name.ilike(f"%{name}%"))
+    skip=int(page-1)*limit
+    data=product.offset(skip).limit(limit).all()
     
-#     return {"page":page,
-#             "limit":limit,
-#             "data":data}    
+    return data   
 
 
  
@@ -415,3 +415,33 @@ def profile_update(id,data,db:Session):
     coustomer.email=data.email
     db.commit()
     return {"Msg":"Change your data"}
+
+
+
+
+#get product by category
+
+def get_product_by_category(data,db:Session):
+    product=db.query(Product).filter(Product.category==data.category).all()
+    if not product:
+        raise HTTPException(status_code=404,detail="not found data")
+    return product
+
+
+
+
+#get product by brand
+
+def get_product_by_brand(data,db:Session):
+    product=db.query(Product).filter(Product.brand==data.brand).all()
+    if not product:
+        raise HTTPException(status_code=404,detail="not found data")
+    return product
+
+#get all Product
+
+def get_all_product(db:Session):
+    product=db.query(Product).all()
+    if not product:
+        raise HTTPException(status_code=404,detail="not found data")
+    return product

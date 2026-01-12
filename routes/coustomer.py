@@ -1,8 +1,8 @@
 from fastapi import APIRouter,Depends,Query,UploadFile,Form,File
-from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas,WishlistSchemas,AddtoCartSchemas,OderSchemas,OrderCencelSchemas,RateUsSchemas,UpdateProfleSchemas
+from schemas.coustomer import CoustomerRegisterSchemas,CoustomerLogin,ChangePasswordSchemas,OtpSentSchemas,ResetPasswordSchemas,ProfileSchemas,WishlistSchemas,AddtoCartSchemas,OderSchemas,OrderCencelSchemas,RateUsSchemas,UpdateProfleSchemas,GetProductByCategory,GetProductByBrand
 from sqlalchemy.orm import Session
 from utils.maindata import get_db
-from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile,wishlist_product,add_to_cart,create_order,cancel_order,get_all_order,delete_coustomer,kyc_detail,review_on_product,cencel_add_to_cart,profile_update
+from controller.coustomer import coustomer_register,coustomer_login,change_password,sent_opt,reset_password,get_product,category_get,brand_get,create_profile,get_profile,wishlist_product,add_to_cart,create_order,cancel_order,get_all_order,delete_coustomer,kyc_detail,review_on_product,cencel_add_to_cart,profile_update,searching_product,get_product_by_category,get_product_by_brand,get_all_product
 
 
 router=APIRouter()
@@ -148,4 +148,31 @@ def update_profile(id,data:UpdateProfleSchemas,db:Session=Depends(get_db)):
     final=profile_update(id,data,db)
     return final
 
+
+#searching product 
+@router.get("/xyzaa")
+def product_searching(page:int=Query(1,ge=1),limit:int=Query(1,ge=1),name:str|None=None,db:Session=Depends(get_db)):
+    final=searching_product(page,limit,name,db)
+    return final
+
+# get product by category  
+@router.get("/getbycategory")
+def product_get_by_category(data:GetProductByCategory,db:Session=Depends(get_db)):
+    final=get_product_by_category(data,db)
+    return final
+
+
+
+# get product by brand    
+@router.get("/getbybrand")
+def product_get_by_brand(data:GetProductByBrand,db:Session=Depends(get_db)):
+    final=get_product_by_brand(data,db)
+    return final
+
+#get all product
+
+@router.get("/getallproduct")
+def all_product_get(db:Session=Depends(get_db)):
+    final=get_all_product(db)
+    return final
 

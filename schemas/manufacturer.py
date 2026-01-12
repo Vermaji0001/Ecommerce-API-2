@@ -82,3 +82,5 @@ class UpdateManufacturerProfleSchemas(BaseModel):
 class IncreaseQuantity (BaseModel):
      increase_quantity:str
                  
+
+                 

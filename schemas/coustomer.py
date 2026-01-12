@@ -121,3 +121,12 @@ class UpdateProfleSchemas(BaseModel):
         pin_code:Optional[str]=None
         city:Optional[str]=None
         address:Optional[str]=None
+
+
+
+class GetProductByCategory(BaseModel):
+    category:str        
+
+
+class GetProductByBrand(BaseModel):
+    brand:str            

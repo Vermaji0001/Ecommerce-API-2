@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from modals.all_modals import Manufacturer,Category,Brands,OtpManufacturer,ProfileManufacturer
 from fastapi import HTTPException
 from modals.all_modals import Product
-from fastapi import UploadFile,File,Form,Query
+
 from sqlalchemy.exc import SQLAlchemyError
 from utils.regular import password_hash,manufacturer_authentication,varify_password,create_token
 from env.private_data import EXPIRY_MINUTES
@@ -58,40 +58,38 @@ def manufacturer_login(data,db:Session):
 
 #Create Product By Manufacturer
 
-async def product_create(manufacturer_id,name,weight,category,brand,quantity,mrp,discount_percentage,file:UploadFile,db:Session):
+def product_create(data,db:Session):
   try:
-    manfacturer=db.query(Manufacturer).filter(Manufacturer.id==manufacturer_id).first()
+    manfacturer=db.query(Manufacturer).filter(Manufacturer.id==data.manufacturer_id).first()
     if not manfacturer:
         raise HTTPException(status_code=404,detail="Manufacturer not exists")  
-    if not file:
-        raise HTTPException(status_code=404,detail="Image not found")
-    product=db.query(Product).filter(Product.name==name).first()
+    
+    product=db.query(Product).filter(Product.name==data.name).first()
     if product:
         raise HTTPException(status_code=404,detail="This Product is already Create")
-    new_image=await file.read()
-    discount_price=mrp*discount_percentage/100
-    sale_price=mrp-discount_price
-    xyz=Product(manufacturer_id=manufacturer_id,
-        image=new_image,
-                name=name,
-                weight=weight,
-                category=category,
-                brand=brand,
-                quantity=quantity,
-                mrp=mrp,
-                discount_percentage=discount_percentage,
+    
+    discount_price=data.mrp*data.discount_percentage/100
+    sale_price=data.mrp-discount_price
+    xyz=Product(manufacturer_id=data.manufacturer_id,
+                name=data.name,
+                weight=data.weight,
+                category=data.category,
+                brand=data.brand,
+                quantity=data.quantity,
+                mrp=data.mrp,
+                discount_percentage=data.discount_percentage,
                 sale_price=sale_price)
     db.add(xyz)
     db.commit()
     db.refresh(xyz)
-    categorys=db.query(Category).filter(Category.name==name).first()
+    categorys=db.query(Category).filter(Category.name==data.category).first()
     if not categorys:
-        xyz=Category(name=category)
+        xyz=Category(name=data.category)
         db.add(xyz)
         db.commit()
-    brands=db.query(Brands).filter(Brands.name==brand).first()
+    brands=db.query(Brands).filter(Brands.name==data.brand).first()
     if not brands:
-        xyz=Brands(name=brand)
+        xyz=Brands(name=data.brand)
         db.add(xyz)
         db.commit()
         return {"msg":"Product create"}
@@ -246,7 +244,7 @@ def profile_update_manufacturer(id,data,db:Session):
 
 
 
-
+# increase quantity
 def increase_quantity(id,data,db:Session):
     product=db.query(Product).filter(Product.id==id).first()
     if product:
@@ -254,3 +252,6 @@ def increase_quantity(id,data,db:Session):
         db.commit()
         return {"Msg":"update Product Quantity"}
     raise HTTPException(status_code=404,detail="NOt found Data")
+
+
+
